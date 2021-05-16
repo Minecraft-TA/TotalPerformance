@@ -1,7 +1,6 @@
 package com.github.minecraft_ta.totalperformance.config;
 
 import com.github.minecraft_ta.totalperformance.TotalPerformance;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,8 +18,6 @@ public class TotalPerformanceConfig {
         this.config = config;
 
         this.loadConfig();
-
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent

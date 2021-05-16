@@ -1,9 +1,10 @@
 package com.github.minecraft_ta.totalperformance;
 
 import com.github.minecraft_ta.totalperformance.config.TotalPerformanceConfig;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.io.File;
 
@@ -21,6 +22,7 @@ public class TotalPerformance {
     }
 
     @Mod.EventHandler
-    public void onPreInit(FMLPreInitializationEvent event) {
+    public void onInit(FMLInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(CONFIG);
     }
 }
