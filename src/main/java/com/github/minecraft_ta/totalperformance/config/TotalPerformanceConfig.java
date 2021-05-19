@@ -52,7 +52,7 @@ public class TotalPerformanceConfig {
             if (!entry.getValue().isList() || (withGeneric && !key.contains(">")))
                 continue;
 
-            String eventClass = key.substring(0, key.indexOf('<'));
+            String eventClass = withGeneric ? key.substring(0, key.indexOf('<')) : key;
             String genericClass = withGeneric ? key.substring(key.indexOf('<') + 1, key.indexOf('>')) : null;
 
             List<String> blockedListeners = Collections.unmodifiableList(Arrays.asList(entry.getValue().getStringList()));
