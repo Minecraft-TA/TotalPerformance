@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.io.File;
 
-@Mod(modid = TotalPerformance.MOD_ID)
+@Mod(modid = TotalPerformance.MOD_ID, version = "1.0.0")
 public class TotalPerformance {
     public static final String MOD_ID = "total_performance";
 

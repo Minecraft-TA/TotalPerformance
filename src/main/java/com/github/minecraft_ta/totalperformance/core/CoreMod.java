@@ -1,15 +1,9 @@
 package com.github.minecraft_ta.totalperformance.core;
 
-import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.launch.MixinBootstrap;
 
 import javax.annotation.Nullable;
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.CodeSource;
 import java.util.Map;
 
 public class CoreMod implements IFMLLoadingPlugin {
@@ -17,7 +11,7 @@ public class CoreMod implements IFMLLoadingPlugin {
     public CoreMod() {
         MixinBootstrap.init();
 
-        CodeSource codeSource = this.getClass().getProtectionDomain().getCodeSource();
+       /* CodeSource codeSource = this.getClass().getProtectionDomain().getCodeSource();
         if (codeSource != null) {
             URL location = codeSource.getLocation();
             try {
@@ -29,7 +23,7 @@ public class CoreMod implements IFMLLoadingPlugin {
         } else {
             LogManager.getLogger().warn("No CodeSource, if this is not a development environment we might run into problems!");
             LogManager.getLogger().warn(this.getClass().getProtectionDomain());
-        }
+        }*/
     }
 
     @Override
