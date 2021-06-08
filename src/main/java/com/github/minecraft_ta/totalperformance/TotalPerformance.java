@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 
@@ -19,6 +20,11 @@ public class TotalPerformance {
     static {
         //pre load this because we need it in MixinEventBus
         CONFIG = new TotalPerformanceConfig(new Configuration(new File(new File("."), "config" + File.separator + MOD_ID + ".cfg")));
+    }
+
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
     }
 
     @Mod.EventHandler
