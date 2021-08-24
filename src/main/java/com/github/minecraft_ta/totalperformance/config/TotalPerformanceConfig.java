@@ -11,9 +11,11 @@ public class TotalPerformanceConfig {
 
     //event class -> triple(whitelist?, generic parameter, list of listeners)
     public Map<String, Triple<Boolean, String, List<String>>> eventBlockMap;
+    public int maxPacketSize;
 
     private static final String CATEGORY_UNSAFE = "unsafe";
     private static final String CATEGORY_EVENTBLOCK = "eventBlock";
+    private static final String CATEGORY_MISC = "MISC";
 
     private final Configuration config;
 
@@ -35,6 +37,7 @@ public class TotalPerformanceConfig {
                     parseEventBlockCategory(child, false);
             }
         }
+        maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
 
         if (this.config.hasChanged())
             this.config.save();
