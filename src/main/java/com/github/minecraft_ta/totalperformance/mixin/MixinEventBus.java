@@ -19,7 +19,7 @@ import java.util.Map;
 public abstract class MixinEventBus {
 
     @Inject(at = @At("HEAD"), method = "register(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/reflect/Method;Lnet/minecraftforge/fml/common/ModContainer;)V", remap = false, cancellable = true)
-    public void register(Class<?> eventType, Object target, Method method, ModContainer owner, CallbackInfo ci) {
+    private void register(Class<?> eventType, Object target, Method method, ModContainer owner, CallbackInfo ci) {
         Class<?> targetClass = target.getClass() == Class.class ? (Class<?>) target : target.getClass();
         Type genericParameterType = method.getGenericParameterTypes()[0];
 
