@@ -1,29 +1,19 @@
 package com.github.minecraft_ta.totalperformance.core;
 
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.Mixins;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 
+@IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
 public class CoreMod implements IFMLLoadingPlugin {
 
     public CoreMod() {
         MixinBootstrap.init();
-
-       /* CodeSource codeSource = this.getClass().getProtectionDomain().getCodeSource();
-        if (codeSource != null) {
-            URL location = codeSource.getLocation();
-            try {
-                File file = new File(location.toURI());
-                if (file.isFile()) {
-                    CoreModManager.getReparseableCoremods().remove(file.getName());
-                }
-            } catch (URISyntaxException ignored) {}
-        } else {
-            LogManager.getLogger().warn("No CodeSource, if this is not a development environment we might run into problems!");
-            LogManager.getLogger().warn(this.getClass().getProtectionDomain());
-        }*/
+        Mixins.addConfiguration("mixins.total_performance.json");
     }
 
     @Override
@@ -44,10 +34,12 @@ public class CoreMod implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
+
     }
 
     @Override
     public String getAccessTransformerClass() {
         return null;
     }
+
 }

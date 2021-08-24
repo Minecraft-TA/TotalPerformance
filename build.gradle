@@ -12,9 +12,8 @@ buildscript {
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 version = mod_version
 group = mod_group
@@ -53,6 +52,7 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    compile 'net.openhft:affinity:3.21ea5'
 
     compile('org.spongepowered:mixin:0.8.3-SNAPSHOT') {
         exclude module: 'guava'
@@ -80,8 +80,9 @@ processResources {
 
 jar {
     from {
+        List<String> shadedJars = Arrays.asList("mixin-0.8.3-SNAPSHOT.jar", "affinity-3.21ea5.jar", "slf4j-api-1.7.30.jar", "jna-platform-5.5.0.jar", "jna-5.5.0.jar")
         configurations.compile
-                .filter { "mixin-0.8.3-SNAPSHOT.jar" == it.name }
+                .filter { shadedJars.contains(it.name) }
                 .collect { it.isDirectory() ? it : zipTree(it) }
     } {
         exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"

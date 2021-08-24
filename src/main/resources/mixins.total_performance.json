@@ -2,6 +2,7 @@
   "compatibilityLevel": "JAVA_8",
   "package": "com.github.minecraft_ta.totalperformance.mixin",
   "mixins": [
+    "MinecraftServerMixin",
     "MixinEventBus"
   ],
   "client": [],
