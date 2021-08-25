@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(CPacketCustomPayload.class)
-public class CPacketCustomPayloadMixin {
+public abstract class CPacketCustomPayloadMixin {
 
     @ModifyConstant(method = "readPacketData", constant = @Constant(intValue = 32767))
     private int modifyMaxPacketSize(int maxPacketSize) {
