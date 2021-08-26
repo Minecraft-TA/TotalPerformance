@@ -1,28 +1,38 @@
 package com.github.minecraft_ta.totalperformance.config;
 
+import com.github.minecraft_ta.totalperformance.TotalPerformance;
 import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.*;
 
 public class TotalPerformanceConfig {
 
-    //event class -> triple(whitelist?, generic parameter, list of listeners)
-    public Map<String, Triple<Boolean, String, List<String>>> eventBlockMap;
-    public int maxPacketSize;
-
     private static final String CATEGORY_UNSAFE = "unsafe";
     private static final String CATEGORY_EVENTBLOCK = "eventBlock";
     private static final String CATEGORY_MISC = "MISC";
-
     private final Configuration config;
+    //event class -> triple(whitelist?, generic parameter, list of listeners)
+    public Map<String, Triple<Boolean, String, List<String>>> eventBlockMap;
+    public int maxPacketSize;
 
     public TotalPerformanceConfig(Configuration config) {
         this.config = config;
 
         this.loadConfig();
+    }
+
+    @SubscribeEvent
+    public void onConfigChange(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(TotalPerformance.MOD_ID)) {
+            loadConfig();
+        }
     }
 
     private void loadConfig() {
@@ -63,4 +73,17 @@ public class TotalPerformanceConfig {
             this.eventBlockMap.put(eventClass, Triple.of(whitelist, genericClass, blockedListeners));
         }
     }
+
+    public List<IConfigElement> getConfigElements() {
+        List<IConfigElement> list = new ArrayList<>();
+
+        list.add(new ConfigElement(config.getCategory(CATEGORY_MISC)));
+
+        return list;
+    }
+
+    public Configuration getConfig() {
+        return config;
+    }
+
 }
