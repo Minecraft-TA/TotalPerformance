@@ -3,7 +3,9 @@
   "package": "com.github.minecraft_ta.totalperformance.mixin",
   "mixins": [
     "CPacketCustomPayloadMixin",
-    "MixinEventBus"
+    "EntityDragonMixin",
+    "MixinEventBus",
+    "MultiPartEntityPartMixin"
   ],
   "client": [],
   "server": []

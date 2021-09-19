@@ -49,10 +49,6 @@ configurations {
     implementation.extendsFrom(embed)
 }
 
-mixin {
-    disableAnnotationProcessorCheck()
-}
-
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     embed('org.spongepowered:mixin:0.8.3-SNAPSHOT') {
@@ -60,6 +56,8 @@ dependencies {
         exclude module: 'commons-io'
         exclude module: 'gson'
     }
+    annotationProcessor 'org.spongepowered:mixin:0.8.3-SNAPSHOT:processor'
+    testAnnotationProcessor 'org.spongepowered:mixin:0.8.3-SNAPSHOT:processor'
 }
 
 processResources {
