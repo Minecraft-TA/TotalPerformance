@@ -11,5 +11,9 @@
     "MultiPartEntityPartMixin"
   ],
   "client": [],
-  "server": []
+  "server": [
+    "MinecraftServerMixin",
+    "WorldServerMixin",
+    "EntityMixin"
+  ]
 }
