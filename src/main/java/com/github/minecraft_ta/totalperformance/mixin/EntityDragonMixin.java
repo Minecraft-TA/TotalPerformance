@@ -12,7 +12,9 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(EntityDragon.class)
 public abstract class EntityDragonMixin extends Entity {
 
-    @Shadow @Final private PhaseManager phaseManager;
+    @Shadow
+    @Final
+    private PhaseManager phaseManager;
 
     public EntityDragonMixin(World worldIn) {
         super(worldIn);
