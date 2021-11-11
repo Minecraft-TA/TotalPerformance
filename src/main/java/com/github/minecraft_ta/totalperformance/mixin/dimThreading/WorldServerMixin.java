@@ -1,4 +1,4 @@
-package com.github.minecraft_ta.totalperformance.mixin;
+package com.github.minecraft_ta.totalperformance.mixin.dimThreading;
 
 import com.github.minecraft_ta.totalperformance.dimThreading.ITeleportableEntity;
 import com.github.minecraft_ta.totalperformance.dimThreading.IWorldAcceptsTeleport;

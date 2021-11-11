@@ -1,4 +1,4 @@
-package com.github.minecraft_ta.totalperformance.mixin;
+package com.github.minecraft_ta.totalperformance.mixin.dimThreading;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MultiPartEntityPart;

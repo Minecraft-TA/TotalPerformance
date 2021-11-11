@@ -12,8 +12,17 @@
   ],
   "client": [],
   "server": [
-    "MinecraftServerMixin",
-    "WorldServerMixin",
-    "EntityMixin"
+    "dimThreading.MinecraftServerMixin",
+    "dimThreading.WorldServerMixin",
+    "dimThreading.EntityMixin",
+    "dimThreading.BlockRedstoneWireMixin",
+    "dimThreading.BlockFurnaceMixin",
+    "dimThreading.BlockFallingMixin",
+    "dimThreading.BlockDragonEggMixin",
+    "dimThreading.BlockLeavesMixin",
+    "dimThreading.ChunkGeneratorEndMixin",
+    "dimThreading.ChunkGeneratorHellMixin",
+    "dimThreading.ChunkGeneratorFlatMixin",
+    "dimThreading.ChunkGeneratorOverworldMixin"
   ]
 }
