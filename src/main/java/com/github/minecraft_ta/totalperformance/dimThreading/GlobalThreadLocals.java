@@ -1,4 +1,4 @@
-package com.github.minecraft_ta.totalperformance.mixin.dimThreading;
+package com.github.minecraft_ta.totalperformance.dimThreading;
 
 public class GlobalThreadLocals {
 

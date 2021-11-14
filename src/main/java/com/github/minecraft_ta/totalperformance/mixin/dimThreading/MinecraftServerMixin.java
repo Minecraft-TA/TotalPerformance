@@ -73,6 +73,7 @@ public abstract class MinecraftServerMixin {
 
     /**
      * @author tth05
+     * @reason Not really needed currently, just removes profiler stuff
      */
     @Overwrite
     public void tick() {
@@ -108,6 +109,7 @@ public abstract class MinecraftServerMixin {
 
     /**
      * @author tth05
+     * @reason Remove world ticking code, we do some other stuff instead
      */
     @Overwrite
     public void updateTimeLightAndEntities() {

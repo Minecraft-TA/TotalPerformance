@@ -12,17 +12,17 @@
   ],
   "client": [],
   "server": [
-    "dimThreading.MinecraftServerMixin",
-    "dimThreading.WorldServerMixin",
-    "dimThreading.EntityMixin",
-    "dimThreading.BlockRedstoneWireMixin",
-    "dimThreading.BlockFurnaceMixin",
-    "dimThreading.BlockFallingMixin",
     "dimThreading.BlockDragonEggMixin",
+    "dimThreading.BlockFallingMixin",
+    "dimThreading.BlockFurnaceMixin",
     "dimThreading.BlockLeavesMixin",
+    "dimThreading.BlockRedstoneWireMixin",
     "dimThreading.ChunkGeneratorEndMixin",
-    "dimThreading.ChunkGeneratorHellMixin",
     "dimThreading.ChunkGeneratorFlatMixin",
-    "dimThreading.ChunkGeneratorOverworldMixin"
+    "dimThreading.ChunkGeneratorHellMixin",
+    "dimThreading.ChunkGeneratorOverworldMixin",
+    "dimThreading.EntityMixin",
+    "dimThreading.MinecraftServerMixin",
+    "dimThreading.WorldServerMixin"
   ]
 }

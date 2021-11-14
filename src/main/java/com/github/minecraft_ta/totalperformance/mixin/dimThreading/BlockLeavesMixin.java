@@ -11,13 +11,26 @@ public abstract class BlockLeavesMixin {
 
     private final ThreadLocal<int[]> surroundings = ThreadLocal.withInitial(() -> null);
 
-    @Redirect(method = {"updateTick"}, at = @At(value = "FIELD", target = "Lnet/minecraft/block/BlockLeaves;surroundings:[I", opcode = Opcodes.PUTFIELD))
-    public void redirectCanProvidePowerToThreadLocal(BlockLeaves instance, int[] value) {
-        this.surroundings.set(value);
+    /**
+     * Mixin GETFIELD for array fields automatically targets array=get access, so we do this instead.
+     */
+    @Redirect(method = {"updateTick"}, at = @At(value = "FIELD", target = "Lnet/minecraft/block/BlockLeaves;surroundings:[I", opcode = Opcodes.GETFIELD, args = {"array=get", "fuzz=25"}))
+    public int redirectCanProvidePowerToThreadLocal(int[] array, int index) {
+        array = this.surroundings.get();
+        if (array == null) {
+            array = new int[32768];
+            this.surroundings.set(array);
+        }
+        return array[index];
     }
 
-    @Redirect(method = {"updateTick"}, at = @At(value = "FIELD", target = "Lnet/minecraft/block/BlockLeaves;surroundings:[I", opcode = Opcodes.GETFIELD))
-    public int[] redirectCanProvidePowerToThreadLocal(BlockLeaves instance) {
-        return this.surroundings.get();
+    @Redirect(method = {"updateTick"}, at = @At(value = "FIELD", target = "Lnet/minecraft/block/BlockLeaves;surroundings:[I", opcode = Opcodes.GETFIELD, args = {"array=set", "fuzz=25"}))
+    public void redirectCanProvidePowerToThreadLocal(int[] array, int index, int value) {
+        array = this.surroundings.get();
+        if (array == null) {
+            array = new int[32768];
+            this.surroundings.set(array);
+        }
+        array[index] = value;
     }
 }

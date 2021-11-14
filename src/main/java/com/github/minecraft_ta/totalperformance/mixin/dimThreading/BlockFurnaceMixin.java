@@ -17,7 +17,7 @@ public abstract class BlockFurnaceMixin {
     }
 
     @Redirect(method = {"breakBlock"}, at = @At(value = "FIELD", target = "Lnet/minecraft/block/BlockFurnace;keepInventory:Z", opcode = Opcodes.GETSTATIC))
-    private static boolean redirectKeepInventoryToThreadLocal() {
+    private boolean redirectKeepInventoryToThreadLocal() {
         return keepInventory.get();
     }
 }
