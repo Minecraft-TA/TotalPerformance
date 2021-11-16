@@ -3,8 +3,7 @@ package com.github.minecraft_ta.totalperformance.mixin.dimThreading;
 import net.minecraft.block.BlockLeaves;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 
 @Mixin(BlockLeaves.class)
 public abstract class BlockLeavesMixin {
@@ -32,5 +31,13 @@ public abstract class BlockLeavesMixin {
             this.surroundings.set(array);
         }
         array[index] = value;
+    }
+
+    /**
+     * @reason Save some memory because that array won't be used
+     */
+    @ModifyConstant(method = "updateTick", constant = @Constant(intValue = 32768))
+    public int modifyArraySize(int oldValue) {
+        return 0;
     }
 }
