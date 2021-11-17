@@ -60,6 +60,11 @@ dependencies {
     testAnnotationProcessor 'org.spongepowered:mixin:0.8.3-SNAPSHOT:processor'
 }
 
+mixin {
+    debug.verbose = true
+    debug.export = true
+}
+
 processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", minecraft_version
