@@ -21,8 +21,10 @@
     "dimThreading.ChunkGeneratorFlatMixin",
     "dimThreading.ChunkGeneratorHellMixin",
     "dimThreading.ChunkGeneratorOverworldMixin",
-    "dimThreading.EntityMixin",
     "dimThreading.MinecraftServerMixin",
-    "dimThreading.WorldServerMixin"
+    "dimThreading.WorldServerMixin",
+    "dimThreading.ChunkProviderServerMixin",
+    "dimThreading.EntityTrackerMixin",
+    "dimThreading.BiomeCacheMixin"
   ]
 }

@@ -54,7 +54,6 @@ public abstract class MinecraftServerMixin {
             public void worldUnload(WorldEvent.Unload e) {
                 worldRunnables.removeIf(w -> {
                     if (w.getWorld() == e.getWorld()) {
-                        LOGGER.info("Stopped thread for world {}", e.getWorld().provider.getDimension());
                         w.stopThread();
                         return true;
                     }
@@ -143,6 +142,10 @@ public abstract class MinecraftServerMixin {
         for (WorldRunnable worldRunnable : this.worldRunnables) {
             if (!worldRunnable.hasCrashed())
                 continue;
+            for (WorldRunnable runnable : this.worldRunnables)
+                runnable.stopThread();
+            this.phaser.arriveAndDeregister();
+            this.phaser.forceTermination();
             throw new ReportedException(worldRunnable.getCrashReport());
         }
 
@@ -165,7 +168,7 @@ public abstract class MinecraftServerMixin {
     }
 
     public void createAndStartThread(WorldServer world) {
-        WorldRunnable worldRunnable = new WorldRunnable(world, this.phaser);
+        WorldRunnable worldRunnable = new WorldRunnable(world, this.phaser, LOGGER);
         Thread worldThread = new Thread(worldRunnable);
         worldThread.setName("TP Dim Thread - " + world.provider.getDimension());
         worldThread.setDaemon(true);
