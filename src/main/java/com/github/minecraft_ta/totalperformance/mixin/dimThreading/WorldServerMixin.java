@@ -50,7 +50,8 @@ public abstract class WorldServerMixin extends World implements IThreadedWorldSe
 
     /**
      * Prevents the tracker entries in {@link net.minecraft.entity.EntityTracker#entries} from being modified by
-     * {@link net.minecraft.world.ServerWorldEventHandler#onEntityAdded(Entity)} during {@link EntityTracker#tick()} .
+     * {@link net.minecraft.world.ServerWorldEventHandler#onEntityAdded(Entity)} during {@link EntityTracker#tick()} and
+     * a few other methods.
      */
     private final ReentrantLock entityTrackerLock = new ReentrantLock();
 
@@ -60,11 +61,11 @@ public abstract class WorldServerMixin extends World implements IThreadedWorldSe
 
     @Inject(method = "tickUpdates", at = @At(value = "FIELD", target = "Lnet/minecraft/world/WorldServer;pendingTickListEntriesTreeSet:Ljava/util/TreeSet;", opcode = Opcodes.GETFIELD, ordinal = 0))
     public void lockTickUpdates(boolean runAllPending, CallbackInfoReturnable<Boolean> cir) {
-        //We lock on the block state lock as well to prevent a deadlock. This may happen when a chunk gets loaded (for example
-        // by a getBlockState call from another thread) and the chunk load causes block updates to be scheduled. The
-        // chunk load couldn't continue, because we own the block update lock. But we couldn't continue either because
-        // the other thread that caused the chunk load may own the world lock (because it called getBlockState which we
-        // want to call as well).
+        //We lock on the block state lock as well to prevent a deadlock. This may happen when a chunk gets loaded (for
+        // example by a getBlockState call from another thread) and the chunk load causes block updates to be scheduled.
+        // The chunk load couldn't continue, because we own the block update lock. But we couldn't continue either
+        // because the other thread that caused the chunk load may own the block state lock (because it called
+        // getBlockState which we want to call as well).
         this.blockStateLock.lock();
         this.blockUpdateLock.lock();
     }

@@ -122,7 +122,6 @@ public abstract class MinecraftServerMixin {
         //Tick chunk io
         ChunkIOExecutor.tick();
 
-        //TODO: Call getIDs to check for leaked worlds...?
         DimensionManager.getIDs(this.tickCounter % 200 == 0);
 
         //Update dimension time
