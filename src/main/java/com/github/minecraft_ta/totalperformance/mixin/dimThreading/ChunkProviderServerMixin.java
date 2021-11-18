@@ -53,7 +53,7 @@ public abstract class ChunkProviderServerMixin {
         ((IConcurrentWorldServer) this.world).getChunkLock().unlock();
     }
 
-    @Inject(method = {"loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;"}, at = @At(value = "FIELD", target = "net/minecraft/world/gen/ChunkProviderServer.loadingChunks : Ljava/util/Set;", opcode = Opcodes.GETFIELD), remap = false)
+    @Inject(method = {"loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;"}, at = @At(value = "FIELD", target = "net/minecraft/world/gen/ChunkProviderServer.loadingChunks : Ljava/util/Set;", opcode = Opcodes.GETFIELD, ordinal = 0), remap = false)
     public void lockLoadChunk(int x, int z, Runnable r, CallbackInfoReturnable<Chunk> cir) {
         ((IConcurrentWorldServer) this.world).getChunkLock().lock();
     }
