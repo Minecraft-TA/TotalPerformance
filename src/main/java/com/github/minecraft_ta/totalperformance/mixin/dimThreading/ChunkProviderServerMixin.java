@@ -20,10 +20,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ChunkProviderServer.class)
 public abstract class ChunkProviderServerMixin {
 
-    @Shadow @Final private static Logger LOGGER;
+    @Shadow
+    @Final
+    private static Logger LOGGER;
     @Shadow
     @Final
     public WorldServer world;
+    @Shadow
+    @Final
+    public IChunkLoader chunkLoader;
+    @Shadow
+    @Final
+    public Long2ObjectMap<Chunk> loadedChunks;
 
     @Inject(method = {"queueUnloadAll"}, at = @At(value = "FIELD", target = "Lnet/minecraft/world/gen/ChunkProviderServer;loadedChunks:Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;", opcode = Opcodes.GETFIELD))
     public void lockQueueUnloadAll(CallbackInfo ci) {
@@ -46,12 +54,12 @@ public abstract class ChunkProviderServerMixin {
     }
 
     //TODO: No obfuscation mapping found
-    @Inject(remap = false, method = {"loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;"}, at = @At(value = "FIELD", target = "Lnet/minecraft/world/gen/ChunkProviderServer;loadingChunks:Ljava/util/Set;", opcode = Opcodes.GETFIELD, ordinal = 0))
+    @Inject(method = "loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;", at = @At(value = "FIELD", target = "net/minecraft/world/gen/ChunkProviderServer.loadingChunks : Ljava/util/Set;", opcode = Opcodes.GETFIELD), remap = false)
     public void lockLoadChunk(int x, int z, Runnable r, CallbackInfoReturnable<Chunk> cir) {
         ((IThreadedWorldServer) this.world).getChunkLock().lock();
     }
 
-    @Inject(remap = false, method = {"loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;"}, at = @At(value = "INVOKE", target = "Ljava/util/Set;remove(Ljava/lang/Object;)Z", shift = At.Shift.AFTER))
+    @Inject(method = "loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;", at = @At(value = "INVOKE", target = "Ljava/util/Set;remove(Ljava/lang/Object;)Z", shift = At.Shift.AFTER), remap = false)
     public void unlockLoadChunk(int x, int z, Runnable r, CallbackInfoReturnable<Chunk> cir) {
         ((IThreadedWorldServer) this.world).getChunkLock().unlock();
     }
@@ -91,12 +99,4 @@ public abstract class ChunkProviderServerMixin {
         ((IThreadedWorldServer) this.world).getChunkLock().unlock();
         cir.setReturnValue(value);
     }
-
-    @Shadow
-    @Final
-    public IChunkLoader chunkLoader;
-
-    @Shadow
-    @Final
-    public Long2ObjectMap<Chunk> loadedChunks;
 }

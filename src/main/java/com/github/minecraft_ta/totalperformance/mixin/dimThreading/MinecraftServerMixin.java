@@ -213,7 +213,7 @@ public abstract class MinecraftServerMixin {
     @Final
     private static Logger LOGGER;
 
-    @Shadow
+    @Shadow(remap = false)
     public Hashtable<Integer, long[]> worldTickTimes;
 
     @Shadow
