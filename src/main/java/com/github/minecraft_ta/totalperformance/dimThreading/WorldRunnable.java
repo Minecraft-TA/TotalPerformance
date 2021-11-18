@@ -12,6 +12,7 @@ public class WorldRunnable implements Runnable {
     private final WorldServer world;
     private final Phaser phaser;
     private final Logger logger;
+    private Thread thread;
 
     private CrashReport crashReport;
 
@@ -37,6 +38,13 @@ public class WorldRunnable implements Runnable {
                 //Pre world tick event
                 FMLCommonHandler.instance().onPreWorldTick(this.world);
 
+                this.lastTickTime = System.nanoTime() - this.lastTickTime;
+
+                //Post world tick barrier
+                this.phaser.arriveAndAwaitAdvance();
+
+                long time = System.nanoTime();
+
                 //Tick world and entities
                 try {
                     this.world.tick();
@@ -54,12 +62,19 @@ public class WorldRunnable implements Runnable {
                     break;
                 }
 
+                this.lastTickTime += System.nanoTime() - time;
+
+                //Post world tick barrier
+                this.phaser.arriveAndAwaitAdvance();
+
+                time = System.nanoTime();
+
                 //Post world tick event
                 FMLCommonHandler.instance().onPostWorldTick(this.world);
                 //Update entity tracker
                 this.world.getEntityTracker().tick();
 
-                this.lastTickTime = System.nanoTime() - this.lastTickTime;
+                this.lastTickTime += System.nanoTime() - time;
 
                 //Tick end barrier
                 this.phaser.arriveAndAwaitAdvance();
@@ -69,7 +84,7 @@ public class WorldRunnable implements Runnable {
             this.world.addWorldInfoToCrashReport(this.crashReport);
         } finally {
             this.phaser.arriveAndDeregister();
-            ((IConcurrentWorldServer)this.world).forceUnlockAll();
+            ((IConcurrentWorldServer) this.world).forceUnlockAll();
 
             this.logger.info("Stopped thread for world {}", this.world.provider.getDimension());
         }
@@ -78,6 +93,10 @@ public class WorldRunnable implements Runnable {
     public void stopThread() {
         this.logger.info("Queued thread stop for world {}", this.world.provider.getDimension());
         this.stop = true;
+    }
+
+    public void setThread(Thread thread) {
+        this.thread = thread;
     }
 
     public long getLastTickTime() {
@@ -94,5 +113,11 @@ public class WorldRunnable implements Runnable {
 
     public CrashReport getCrashReport() {
         return crashReport;
+    }
+
+    public void interruptAndStopThread() {
+        this.logger.info("Interrupt and stop thread {}", this.world.provider.getDimension());
+        this.thread.interrupt();
+        this.stop = true;
     }
 }

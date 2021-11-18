@@ -134,6 +134,10 @@ public abstract class MinecraftServerMixin {
 
         //Tick start barrier
         this.phaser.arriveAndAwaitAdvance();
+        //Pre world tick barrier
+        this.phaser.arriveAndAwaitAdvance();
+        //Post world tick barrier
+        this.phaser.arriveAndAwaitAdvance();
         //Tick end barrier
         this.phaser.arriveAndAwaitAdvance();
 
@@ -142,7 +146,7 @@ public abstract class MinecraftServerMixin {
             if (!worldRunnable.hasCrashed())
                 continue;
             for (WorldRunnable runnable : this.worldRunnables)
-                runnable.stopThread();
+                runnable.interruptAndStopThread();
             this.phaser.arriveAndDeregister();
             this.phaser.forceTermination();
             throw new ReportedException(worldRunnable.getCrashReport());
@@ -169,6 +173,7 @@ public abstract class MinecraftServerMixin {
     public void createAndStartThread(WorldServer world) {
         WorldRunnable worldRunnable = new WorldRunnable(world, this.phaser, LOGGER);
         Thread worldThread = new Thread(worldRunnable);
+        worldRunnable.setThread(worldThread);
         worldThread.setName("TP Dim Thread - " + world.provider.getDimension());
         worldThread.setDaemon(true);
         worldThread.start();
