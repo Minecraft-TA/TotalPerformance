@@ -53,13 +53,12 @@ public abstract class ChunkProviderServerMixin {
         ((IThreadedWorldServer) this.world).getChunkLock().unlock();
     }
 
-    //TODO: No obfuscation mapping found
-    @Inject(method = "loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;", at = @At(value = "FIELD", target = "net/minecraft/world/gen/ChunkProviderServer.loadingChunks : Ljava/util/Set;", opcode = Opcodes.GETFIELD), remap = false)
+    @Inject(method = {"loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;"}, at = @At(value = "FIELD", target = "net/minecraft/world/gen/ChunkProviderServer.loadingChunks : Ljava/util/Set;", opcode = Opcodes.GETFIELD), remap = false)
     public void lockLoadChunk(int x, int z, Runnable r, CallbackInfoReturnable<Chunk> cir) {
         ((IThreadedWorldServer) this.world).getChunkLock().lock();
     }
 
-    @Inject(method = "loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;", at = @At(value = "INVOKE", target = "Ljava/util/Set;remove(Ljava/lang/Object;)Z", shift = At.Shift.AFTER), remap = false)
+    @Inject(method = {"loadChunk(IILjava/lang/Runnable;)Lnet/minecraft/world/chunk/Chunk;"}, at = @At(value = "INVOKE", target = "Ljava/util/Set;remove(Ljava/lang/Object;)Z", shift = At.Shift.AFTER), remap = false)
     public void unlockLoadChunk(int x, int z, Runnable r, CallbackInfoReturnable<Chunk> cir) {
         ((IThreadedWorldServer) this.world).getChunkLock().unlock();
     }
