@@ -25,6 +25,8 @@
     "dimThreading.WorldServerMixin",
     "dimThreading.ChunkProviderServerMixin",
     "dimThreading.EntityTrackerMixin",
-    "dimThreading.BiomeCacheMixin"
+    "dimThreading.BiomeCacheMixin",
+    "dimThreading.EventBusMixin",
+    "dimThreading.ASMEventHandlerMixin"
   ]
 }

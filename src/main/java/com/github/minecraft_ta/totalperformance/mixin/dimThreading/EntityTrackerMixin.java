@@ -1,6 +1,6 @@
 package com.github.minecraft_ta.totalperformance.mixin.dimThreading;
 
-import com.github.minecraft_ta.totalperformance.dimThreading.IThreadedWorldServer;
+import com.github.minecraft_ta.totalperformance.dimThreading.IConcurrentWorldServer;
 import net.minecraft.entity.EntityTracker;
 import net.minecraft.world.WorldServer;
 import org.spongepowered.asm.mixin.Final;
@@ -17,31 +17,31 @@ public abstract class EntityTrackerMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void lockTick(CallbackInfo ci) {
-        ((IThreadedWorldServer)this.world).getEntityTrackerLock().lock();
+        ((IConcurrentWorldServer)this.world).getEntityTrackerLock().lock();
     }
 
     @Inject(method = "tick", at = @At("RETURN"))
     public void unlockTick(CallbackInfo ci) {
-        ((IThreadedWorldServer)this.world).getEntityTrackerLock().unlock();
+        ((IConcurrentWorldServer)this.world).getEntityTrackerLock().unlock();
     }
 
     @Inject(method = "track(Lnet/minecraft/entity/Entity;)V", at = @At("HEAD"))
     public void lockTrack(CallbackInfo ci) {
-        ((IThreadedWorldServer)this.world).getEntityTrackerLock().lock();
+        ((IConcurrentWorldServer)this.world).getEntityTrackerLock().lock();
     }
 
     @Inject(method = "track(Lnet/minecraft/entity/Entity;)V", at = @At("RETURN"))
     public void unlockTrack(CallbackInfo ci) {
-        ((IThreadedWorldServer)this.world).getEntityTrackerLock().unlock();
+        ((IConcurrentWorldServer)this.world).getEntityTrackerLock().unlock();
     }
 
     @Inject(method = "sendLeashedEntitiesInChunk", at = @At("HEAD"))
     public void lockSendLeashedEntitiesInChunk(CallbackInfo ci) {
-        ((IThreadedWorldServer)this.world).getEntityTrackerLock().lock();
+        ((IConcurrentWorldServer)this.world).getEntityTrackerLock().lock();
     }
 
     @Inject(method = "sendLeashedEntitiesInChunk", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z", ordinal = 1))
     public void unlockSendLeashedEntitiesInChunk(CallbackInfo ci) {
-        ((IThreadedWorldServer)this.world).getEntityTrackerLock().unlock();
+        ((IConcurrentWorldServer)this.world).getEntityTrackerLock().unlock();
     }
 }

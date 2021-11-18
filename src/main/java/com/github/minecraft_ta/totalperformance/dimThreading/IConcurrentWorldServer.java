@@ -2,7 +2,7 @@ package com.github.minecraft_ta.totalperformance.dimThreading;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public interface IThreadedWorldServer {
+public interface IConcurrentWorldServer {
 
     ReentrantLock getEntityTrackerLock();
 

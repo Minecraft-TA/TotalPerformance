@@ -69,7 +69,7 @@ public class WorldRunnable implements Runnable {
             this.world.addWorldInfoToCrashReport(this.crashReport);
         } finally {
             this.phaser.arriveAndDeregister();
-            ((IThreadedWorldServer)this.world).forceUnlockAll();
+            ((IConcurrentWorldServer)this.world).forceUnlockAll();
 
             this.logger.info("Stopped thread for world {}", this.world.provider.getDimension());
         }

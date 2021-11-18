@@ -1,6 +1,6 @@
 package com.github.minecraft_ta.totalperformance.mixin.dimThreading;
 
-import com.github.minecraft_ta.totalperformance.dimThreading.IThreadedWorldServer;
+import com.github.minecraft_ta.totalperformance.dimThreading.IConcurrentWorldServer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Mixin(WorldServer.class)
-public abstract class WorldServerMixin extends World implements IThreadedWorldServer {
+public abstract class WorldServerMixin extends World implements IConcurrentWorldServer {
 
     /**
      * This lock prevents other threads from calling {@link World#getBlockState(BlockPos)} and

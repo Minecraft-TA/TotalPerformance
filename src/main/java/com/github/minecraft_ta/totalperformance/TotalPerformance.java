@@ -15,6 +15,7 @@ import java.io.File;
         guiFactory = "com.github.minecraft_ta.totalperformance.config.gui.ModGuiFactory"
 )
 public class TotalPerformance {
+
     public static final String MOD_ID = "total_performance";
 
     @Mod.Instance
@@ -28,7 +29,6 @@ public class TotalPerformance {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
     }
 
     @Mod.EventHandler
