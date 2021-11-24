@@ -40,8 +40,8 @@ public class WorldRunnable implements Runnable {
 
                 this.lastTickTime = System.nanoTime() - this.lastTickTime;
 
-                //Post world tick barrier
-                this.phaser.arriveAndAwaitAdvance();
+                //Pre world tick barrier
+//                this.phaser.arriveAndAwaitAdvance();
 
                 long time = System.nanoTime();
 
@@ -65,7 +65,7 @@ public class WorldRunnable implements Runnable {
                 this.lastTickTime += System.nanoTime() - time;
 
                 //Post world tick barrier
-                this.phaser.arriveAndAwaitAdvance();
+//                this.phaser.arriveAndAwaitAdvance();
 
                 time = System.nanoTime();
 

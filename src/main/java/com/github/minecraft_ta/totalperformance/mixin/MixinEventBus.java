@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Mixin(EventBus.class)
 public abstract class MixinEventBus {
@@ -23,11 +23,11 @@ public abstract class MixinEventBus {
         Class<?> targetClass = target.getClass() == Class.class ? (Class<?>) target : target.getClass();
         Type genericParameterType = method.getGenericParameterTypes()[0];
 
-        Map<String, Triple<Boolean, String, List<String>>> eventBlockMap = TotalPerformance.CONFIG.eventBlockMap;
+        Map<String, Triple<Boolean, String, Set<String>>> eventBlockMap = TotalPerformance.CONFIG.eventBlockMap;
         if (eventBlockMap.isEmpty())
             return;
 
-        Triple<Boolean, String, List<String>> entry = eventBlockMap.get(eventType.getName());
+        Triple<Boolean, String, Set<String>> entry = eventBlockMap.get(eventType.getName());
         if (entry == null)
             return;
 

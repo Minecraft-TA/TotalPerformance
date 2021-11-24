@@ -8,18 +8,33 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TotalPerformanceConfig {
 
     private static final String CATEGORY_UNSAFE = "unsafe";
     private static final String CATEGORY_EVENTBLOCK = "eventBlock";
-    private static final String CATEGORY_MISC = "MISC";
+    private static final String CATEGORY_MISC = "misc";
+    private static final String CATEGORY_DIM_THREADING = "dimThreading";
+    private static final String CATEGORY_SYNCHRONIZED_LISTENERS = "synchronizedListeners";
+
     private final Configuration config;
-    //event class -> triple(whitelist?, generic parameter, list of listeners)
-    public Map<String, Triple<Boolean, String, List<String>>> eventBlockMap;
+
+    //Class of event -> Triple(whitelist?, generic parameter, list of listeners)
+    public Map<String, Triple<Boolean, String, Set<String>>> eventBlockMap;
+    /**
+     * Class of event -> Pair(whitelist?, list of listeners)
+     * <br><br>
+     * Whitelist: All listeners except for the whitelisted ones are allowed to run in parallel
+     * <br>
+     * Blacklist: No listener is allowed to run in parallel except for the blacklisted ones
+     */
+    public Map<String, Pair<Boolean, Set<String>>> synchronizedListenersMap;
+
     public int maxPacketSize;
 
     public TotalPerformanceConfig(Configuration config) {
@@ -37,6 +52,7 @@ public class TotalPerformanceConfig {
 
     private void loadConfig() {
         this.eventBlockMap = new HashMap<>();
+        this.synchronizedListenersMap = new ConcurrentHashMap<>();
 
         ConfigCategory eventBlockCategory = this.config.getCategory(CATEGORY_UNSAFE + Configuration.CATEGORY_SPLITTER + CATEGORY_EVENTBLOCK);
         if (eventBlockCategory != null) {
@@ -47,7 +63,18 @@ public class TotalPerformanceConfig {
                     parseEventBlockCategory(child, false);
             }
         }
-        maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
+
+        ConfigCategory dimThreadingCategory = this.config.getCategory(CATEGORY_DIM_THREADING + Configuration.CATEGORY_SPLITTER + CATEGORY_SYNCHRONIZED_LISTENERS);
+        if (dimThreadingCategory != null) {
+            for (ConfigCategory child : dimThreadingCategory.getChildren()) {
+                if (child.getName().equals("whitelist"))
+                    parseSynchronizedListenersCategory(child, true);
+                else if (child.getName().equals("blacklist"))
+                    parseSynchronizedListenersCategory(child, false);
+            }
+        }
+
+        this.maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
 
         if (this.config.hasChanged())
             this.config.save();
@@ -68,9 +95,23 @@ public class TotalPerformanceConfig {
             String eventClass = withGeneric ? key.substring(0, key.indexOf('<')) : key;
             String genericClass = withGeneric ? key.substring(key.indexOf('<') + 1, key.indexOf('>')) : null;
 
-            List<String> blockedListeners = Collections.unmodifiableList(Arrays.asList(entry.getValue().getStringList()));
+            Set<String> blockedListeners = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(entry.getValue().getStringList())));
 
             this.eventBlockMap.put(eventClass, Triple.of(whitelist, genericClass, blockedListeners));
+        }
+    }
+
+    private void parseSynchronizedListenersCategory(ConfigCategory category, boolean whitelist) {
+        if (category == null || category.entrySet().size() < 1)
+            return;
+
+        for (Map.Entry<String, Property> entry : category.entrySet()) {
+            //invalid syntax
+            if (!entry.getValue().isList())
+                continue;
+
+            Set<String> listeners = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(entry.getValue().getStringList())));
+            this.synchronizedListenersMap.put(entry.getKey(), Pair.of(whitelist, listeners));
         }
     }
 

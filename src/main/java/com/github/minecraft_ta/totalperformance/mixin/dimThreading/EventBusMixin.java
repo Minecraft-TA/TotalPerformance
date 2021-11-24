@@ -1,18 +1,20 @@
 package com.github.minecraft_ta.totalperformance.mixin.dimThreading;
 
+import com.github.minecraft_ta.totalperformance.TotalPerformance;
 import com.github.minecraft_ta.totalperformance.dimThreading.ForwardingEventHandlerInvocationException;
 import com.github.minecraft_ta.totalperformance.dimThreading.IConcurrentEventHandler;
 import com.google.common.base.Throwables;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraftforge.fml.common.eventhandler.*;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import javax.annotation.Nullable;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,9 +40,10 @@ public abstract class EventBusMixin {
         if (shutdown) return false;
 
         IEventListener[] listeners = event.getListenerList().getListeners(busID);
+        Pair<Boolean, Set<String>> entry = TotalPerformance.CONFIG.synchronizedListenersMap.get(event.getClass().getName());
 
         //Run old code for these events
-        if (!(event instanceof TickEvent.WorldTickEvent)) {
+        if (entry == null) {
             int index = 0;
             try {
                 for (; index < listeners.length; index++) {
@@ -58,13 +61,14 @@ public abstract class EventBusMixin {
 
                     //Before we move to the next priority, we should invoke all pending handlers
                     if (listener instanceof EventPriority) {
-                        runAllMissingHandlers(indices, listeners, event);
+                        runAllMissingHandlers(indices, listeners, event, entry);
                         continue;
                     }
 
                     IConcurrentEventHandler concurrentHandler = (IConcurrentEventHandler) listener;
-                    //The timeout just saves some CPU if all locks are already locked.
-                    if (!concurrentHandler.getEventHandlerLock().tryLock(1, TimeUnit.MILLISECONDS)) {
+                    boolean shouldLock = shouldTryLock(concurrentHandler, entry);
+
+                    if (shouldLock && !concurrentHandler.getEventHandlerLock().tryLock()) {
                         if (indices == null)
                             indices = new IntArrayList();
                         indices.add(index);
@@ -72,11 +76,13 @@ public abstract class EventBusMixin {
                     }
 
                     listeners[index].invoke(event);
-                    concurrentHandler.getEventHandlerLock().unlock();
+
+                    if (shouldLock)
+                        concurrentHandler.getEventHandlerLock().unlock();
                 }
 
                 //Run again to clean up
-                runAllMissingHandlers(indices, listeners, event);
+                runAllMissingHandlers(indices, listeners, event, entry);
             } catch (ForwardingEventHandlerInvocationException e) {
                 handleException(event, listeners, e.getListenerIndex(), e.getCause());
             } catch (Throwable throwable) {
@@ -92,7 +98,7 @@ public abstract class EventBusMixin {
         throw new RuntimeException(throwable);
     }
 
-    private void runAllMissingHandlers(@Nullable IntList indices, IEventListener[] listeners, Event event) throws ForwardingEventHandlerInvocationException {
+    private void runAllMissingHandlers(@Nullable IntList indices, IEventListener[] listeners, Event event, Pair<Boolean, Set<String>> entry) throws ForwardingEventHandlerInvocationException {
         if (indices == null || indices.isEmpty())
             return;
 
@@ -104,18 +110,32 @@ public abstract class EventBusMixin {
                     index = 0;
 
                 IConcurrentEventHandler concurrentHandler = (IConcurrentEventHandler) listeners[indices.get(index++)];
+                boolean shouldLock = shouldTryLock(concurrentHandler, entry);
+
                 //The timeout just saves some CPU if all locks are already locked.
-                if (!concurrentHandler.getEventHandlerLock().tryLock(1, TimeUnit.MILLISECONDS)) {
+                if (shouldLock && !concurrentHandler.getEventHandlerLock().tryLock(10_000, TimeUnit.NANOSECONDS)) {
                     continue;
                 }
 
                 ((IEventListener) concurrentHandler).invoke(event);
 
                 indices.remove(index - 1);
-                concurrentHandler.getEventHandlerLock().unlock();
+
+                if (shouldLock)
+                    concurrentHandler.getEventHandlerLock().unlock();
             }
         } catch (Throwable t) {
             throw new ForwardingEventHandlerInvocationException(t, index - 1);
         }
+    }
+
+    private boolean shouldTryLock(IConcurrentEventHandler listener, Pair<Boolean, Set<String>> entry) {
+        //XNOR
+        //whitelist|contains|Y
+        //0        |0       |1
+        //0        |1       |0
+        //1        |0       |0
+        //1        |1       |1
+        return entry.getLeft() == entry.getRight().contains(listener.getTargetClass().getName());
     }
 }

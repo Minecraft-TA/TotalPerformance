@@ -135,9 +135,9 @@ public abstract class MinecraftServerMixin {
         //Tick start barrier
         this.phaser.arriveAndAwaitAdvance();
         //Pre world tick barrier
-        this.phaser.arriveAndAwaitAdvance();
+//        this.phaser.arriveAndAwaitAdvance();
         //Post world tick barrier
-        this.phaser.arriveAndAwaitAdvance();
+//        this.phaser.arriveAndAwaitAdvance();
         //Tick end barrier
         this.phaser.arriveAndAwaitAdvance();
 
