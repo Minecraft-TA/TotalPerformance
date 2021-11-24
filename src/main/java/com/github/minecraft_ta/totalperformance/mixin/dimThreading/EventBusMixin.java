@@ -110,10 +110,8 @@ public abstract class EventBusMixin {
                     index = 0;
 
                 IConcurrentEventHandler concurrentHandler = (IConcurrentEventHandler) listeners[indices.get(index++)];
-                boolean shouldLock = shouldTryLock(concurrentHandler, entry);
-
                 //The timeout just saves some CPU if all locks are already locked.
-                if (shouldLock && !concurrentHandler.getEventHandlerLock().tryLock(10_000, TimeUnit.NANOSECONDS)) {
+                if (!concurrentHandler.getEventHandlerLock().tryLock(10_000, TimeUnit.NANOSECONDS)) {
                     continue;
                 }
 
@@ -121,8 +119,7 @@ public abstract class EventBusMixin {
 
                 indices.remove(index - 1);
 
-                if (shouldLock)
-                    concurrentHandler.getEventHandlerLock().unlock();
+                concurrentHandler.getEventHandlerLock().unlock();
             }
         } catch (Throwable t) {
             throw new ForwardingEventHandlerInvocationException(t, index - 1);
