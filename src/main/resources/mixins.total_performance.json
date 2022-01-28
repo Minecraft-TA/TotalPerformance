@@ -8,7 +8,8 @@
     "EntityMixin",
     "MixinEventBus",
     "ExplosionMixin",
-    "MultiPartEntityPartMixin"
+    "MultiPartEntityPartMixin",
+    "FakePlayerMixin"
   ],
   "client": [],
   "server": []
