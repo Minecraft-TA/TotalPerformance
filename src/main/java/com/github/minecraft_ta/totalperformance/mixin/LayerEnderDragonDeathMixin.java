@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LayerEnderDragonDeath.class)
-public class LayerEnderDragonDeathMixin {
+public abstract class LayerEnderDragonDeathMixin {
 
     @Inject(method = "doRenderLayer(Lnet/minecraft/entity/boss/EntityDragon;FFFFFFF)V", at = @At("HEAD"), cancellable = true)
     private void onRenderEnderDragonDeathLayer(CallbackInfo ci) {
