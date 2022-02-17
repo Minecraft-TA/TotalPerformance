@@ -7,12 +7,15 @@
     "CPacketCustomPayloadMixin",
     "EntityDragonMixin",
     "EntityMixin",
-    "MixinEventBus",
     "ExplosionMixin",
-    "MultiPartEntityPartMixin",
     "FakePlayerMixin",
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "MixinEventBus",
+    "MultiPartEntityPartMixin",
+    "PhaseDyingMixin"
   ],
-  "client": [],
+  "client": [
+    "LayerEnderDragonDeathMixin"
+  ],
   "server": []
 }

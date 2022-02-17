@@ -21,6 +21,7 @@ public class TotalPerformanceConfig {
     //event class -> triple(whitelist?, generic parameter, list of listeners)
     public Map<String, Triple<Boolean, String, List<String>>> eventBlockMap;
     public int maxPacketSize;
+    public boolean doDragonParticles;
 
     public TotalPerformanceConfig(Configuration config) {
         this.config = config;
@@ -48,6 +49,7 @@ public class TotalPerformanceConfig {
             }
         }
         maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
+        doDragonParticles = this.config.getBoolean("doDragonParticles", CATEGORY_MISC, true, "Set to false to disable the dragon particles");
 
         if (this.config.hasChanged())
             this.config.save();
