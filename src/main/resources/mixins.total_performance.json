@@ -3,13 +3,15 @@
   "minVersion": "0.7.4",
   "package": "com.github.minecraft_ta.totalperformance.mixin",
   "mixins": [
+    "ChunkMixin",
     "CPacketCustomPayloadMixin",
     "EntityDragonMixin",
     "EntityMixin",
     "MixinEventBus",
     "ExplosionMixin",
     "MultiPartEntityPartMixin",
-    "FakePlayerMixin"
+    "FakePlayerMixin",
+    "ItemStackMixin"
   ],
   "client": [],
   "server": []
