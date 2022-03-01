@@ -1,4 +1,4 @@
-package babules.api;
+package baubles.api;
 
 public enum BaubleType {
 	AMULET(0),

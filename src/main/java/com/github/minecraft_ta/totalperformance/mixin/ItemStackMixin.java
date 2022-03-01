@@ -1,6 +1,6 @@
 package com.github.minecraft_ta.totalperformance.mixin;
 
-import babules.api.IBauble;
+import baubles.api.IBauble;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
