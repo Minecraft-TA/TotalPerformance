@@ -42,7 +42,7 @@ public class TotalPerformanceCommand extends CommandBase {
                 TotalPerformance.CONFIG.setLoadSpawnChunks(Boolean.parseBoolean(args[1]));
             }
         }
-        TotalPerformance.CONFIG.getConfig().save();
+        TotalPerformance.CONFIG.loadConfig();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class TotalPerformanceConfig {
         }
     }
 
-    private void loadConfig() {
+    public void loadConfig() {
         this.eventBlockMap = new HashMap<>();
 
         ConfigCategory eventBlockCategory = this.config.getCategory(CATEGORY_UNSAFE + Configuration.CATEGORY_SPLITTER + CATEGORY_EVENTBLOCK);
@@ -93,12 +93,10 @@ public class TotalPerformanceConfig {
     }
 
     public void setLoadSpawnChunks(boolean loadSpawnChunks) {
-        this.loadSpawnChunks = loadSpawnChunks;
-        this.config.get(CATEGORY_MISC, "loadSpawnChunks", loadSpawnChunks).set(loadSpawnChunks);
+        this.config.get(CATEGORY_MISC, "loadSpawnChunks", true).set(loadSpawnChunks);
     }
 
     public void setAutoSaveInterval(int autoSaveInterval) {
-        this.autoSaveInterval = autoSaveInterval;
-        this.config.get(CATEGORY_MISC, "autoSaveInterval", autoSaveInterval).set(autoSaveInterval);
+        this.config.get(CATEGORY_MISC, "autoSaveInterval", 900).set(autoSaveInterval);
     }
 }
