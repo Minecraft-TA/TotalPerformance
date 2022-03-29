@@ -12,7 +12,8 @@
     "ItemStackMixin",
     "MixinEventBus",
     "MultiPartEntityPartMixin",
-    "PhaseDyingMixin"
+    "PhaseDyingMixin",
+    "WorldProviderSurfaceMixin"
   ],
   "client": [
     "LayerEnderDragonDeathMixin"
