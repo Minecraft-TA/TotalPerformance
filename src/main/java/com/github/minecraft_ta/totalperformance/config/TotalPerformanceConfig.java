@@ -92,4 +92,13 @@ public class TotalPerformanceConfig {
         return config;
     }
 
+    public void setLoadSpawnChunks(boolean loadSpawnChunks) {
+        this.loadSpawnChunks = loadSpawnChunks;
+        this.config.get(CATEGORY_MISC, "loadSpawnChunks", loadSpawnChunks).set(loadSpawnChunks);
+    }
+
+    public void setAutoSaveInterval(int autoSaveInterval) {
+        this.autoSaveInterval = autoSaveInterval;
+        this.config.get(CATEGORY_MISC, "autoSaveInterval", autoSaveInterval).set(autoSaveInterval);
+    }
 }

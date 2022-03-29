@@ -32,14 +32,14 @@ public class TotalPerformanceCommand extends CommandBase {
         if (args[0].equals("autoSaveInterval")) {
             if (args.length > 1) {
                 try {
-                    TotalPerformance.CONFIG.autoSaveInterval = Integer.parseInt(args[1]);
+                    TotalPerformance.CONFIG.setAutoSaveInterval(Integer.parseInt(args[1]));
                 } catch (NumberFormatException e) {
                     throw new CommandException("Invalid number: " + args[1]);
                 }
             }
         } else if (args[0].equals("loadSpawnChunks")) {
             if (args.length > 1) {
-                TotalPerformance.CONFIG.loadSpawnChunks = Boolean.parseBoolean(args[1]);
+                TotalPerformance.CONFIG.setLoadSpawnChunks(Boolean.parseBoolean(args[1]));
             }
         }
         TotalPerformance.CONFIG.getConfig().save();
