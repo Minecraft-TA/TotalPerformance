@@ -12,7 +12,7 @@ public abstract class WorldProviderSurfaceMixin {
 
     @Inject(method = "canDropChunk", at = @At("HEAD"), cancellable = true)
     public void canDropChunk(int x, int z, CallbackInfoReturnable<Boolean> cir) {
-        if (TotalPerformance.CONFIG.loadSpawnChunks) {
+        if (!TotalPerformance.CONFIG.loadSpawnChunks) {
             cir.setReturnValue(true);
         }
     }

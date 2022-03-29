@@ -23,6 +23,7 @@ public class TotalPerformanceConfig {
     public int maxPacketSize;
     public boolean doDragonParticles;
     public boolean loadSpawnChunks;
+    public int autoSaveInterval;
 
     public TotalPerformanceConfig(Configuration config) {
         this.config = config;
@@ -52,6 +53,7 @@ public class TotalPerformanceConfig {
         maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
         doDragonParticles = this.config.getBoolean("doDragonParticles", CATEGORY_MISC, true, "Set to false to disable the dragon particles");
         loadSpawnChunks = this.config.getBoolean("loadSpawnChunks", CATEGORY_MISC, true, "Set to false to disable the spawn chunks from loading");
+        autoSaveInterval = this.config.getInt("autoSaveInterval", CATEGORY_MISC, 900, 0, Integer.MAX_VALUE, "Sets the interval in seconds for the server to save the world");
 
         if (this.config.hasChanged())
             this.config.save();

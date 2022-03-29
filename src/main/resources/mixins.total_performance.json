@@ -10,6 +10,7 @@
     "ExplosionMixin",
     "FakePlayerMixin",
     "ItemStackMixin",
+    "MinecraftServerMixin",
     "MixinEventBus",
     "MultiPartEntityPartMixin",
     "PhaseDyingMixin",
