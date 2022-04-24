@@ -14,7 +14,8 @@ import java.io.File;
 @Mod(
         modid = TotalPerformance.MOD_ID,
         version = "1.0.0",
-        guiFactory = "com.github.minecraft_ta.totalperformance.config.gui.ModGuiFactory"
+        guiFactory = "com.github.minecraft_ta.totalperformance.config.gui.ModGuiFactory",
+        acceptableRemoteVersions = "*"
 )
 public class TotalPerformance {
     public static final String MOD_ID = "total_performance";
