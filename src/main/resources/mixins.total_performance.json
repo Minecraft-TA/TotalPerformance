@@ -18,7 +18,8 @@
     "WorldProviderSurfaceMixin"
   ],
   "client": [
-    "LayerEnderDragonDeathMixin"
+    "LayerEnderDragonDeathMixin",
+    "TileEntityMixin"
   ],
   "server": []
 }

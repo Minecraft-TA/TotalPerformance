@@ -21,6 +21,7 @@ public class TotalPerformanceConfig {
     //event class -> triple(whitelist?, generic parameter, list of listeners)
     public Map<String, Triple<Boolean, String, List<String>>> eventBlockMap;
     public int maxPacketSize;
+    public int maxTileEntityRenderDistanceSquared;
     public boolean doDragonParticles;
     public boolean loadSpawnChunks;
     public int autoSaveInterval;
@@ -50,10 +51,12 @@ public class TotalPerformanceConfig {
                     parseEventBlockCategory(child, false);
             }
         }
-        maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
-        doDragonParticles = this.config.getBoolean("doDragonParticles", CATEGORY_MISC, true, "Set to false to disable the dragon particles");
-        loadSpawnChunks = this.config.getBoolean("loadSpawnChunks", CATEGORY_MISC, true, "Set to false to disable the spawn chunks from loading");
-        autoSaveInterval = this.config.getInt("autoSaveInterval", CATEGORY_MISC, 900, 0, Integer.MAX_VALUE, "Sets the interval in ticks for the server to save the world");
+
+        this.autoSaveInterval = this.config.getInt("autoSaveInterval", CATEGORY_MISC, 900, 0, Integer.MAX_VALUE, "Sets the interval in ticks for the server to save the world");
+        this.loadSpawnChunks = this.config.getBoolean("loadSpawnChunks", CATEGORY_MISC, true, "Set to false to disable the spawn chunks from loading");
+        this.maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
+        this.doDragonParticles = this.config.getBoolean("doDragonParticles", CATEGORY_MISC, true, "Set to false to disable the dragon particles");
+        this.maxTileEntityRenderDistanceSquared = (int) Math.pow(this.config.getInt("maxTileEntityRenderDistance", CATEGORY_MISC, 64, 0, Integer.MAX_VALUE, "Sets a custom max render distance for tile entities"), 2);
 
         if (this.config.hasChanged())
             this.config.save();
@@ -83,13 +86,13 @@ public class TotalPerformanceConfig {
     public List<IConfigElement> getConfigElements() {
         List<IConfigElement> list = new ArrayList<>();
 
-        list.add(new ConfigElement(config.getCategory(CATEGORY_MISC)));
+        list.add(new ConfigElement(this.config.getCategory(CATEGORY_MISC)));
 
         return list;
     }
 
     public Configuration getConfig() {
-        return config;
+        return this.config;
     }
 
     public void setLoadSpawnChunks(boolean loadSpawnChunks) {
