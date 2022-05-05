@@ -35,11 +35,15 @@ public abstract class EntityTrackerEntryMixin {
      */
     @Overwrite
     private Packet<?> createSpawnPacket() {
+        return createSpawnPacket0();
+    }
+
+    private Packet<?> createSpawnPacket0() {
         if (this.trackedEntity.isDead) {
             LOGGER.warn("Fetching addPacket for removed entity");
         }
 
-        Packet pkt = FMLNetworkHandler.getEntitySpawningPacket(this.trackedEntity);
+        Packet<?> pkt = FMLNetworkHandler.getEntitySpawningPacket(this.trackedEntity);
         if (pkt != null) return pkt;
 
         if (this.trackedEntity instanceof EntityPlayerMP) {
@@ -61,7 +65,15 @@ public abstract class EntityTrackerEntryMixin {
         } else if (this.trackedEntity instanceof EntityFishHook) {
             Entity entity2 = ((EntityFishHook) this.trackedEntity).getAngler();
             return new SPacketSpawnObject(this.trackedEntity, 90, entity2 == null ? this.trackedEntity.getEntityId() : entity2.getEntityId());
-        } else if (this.trackedEntity instanceof EntitySpectralArrow) {
+        } else {
+            Packet<?> spawnPacket1 = createSpawnPacket1();
+            if (spawnPacket1 != null) return spawnPacket1;
+            throw new IllegalArgumentException("Don't know how to add " + this.trackedEntity.getClass() + "!");
+        }
+    }
+
+    private Packet<?> createSpawnPacket1() {
+        if (this.trackedEntity instanceof EntitySpectralArrow) {
             Entity entity1 = ((EntitySpectralArrow) this.trackedEntity).shootingEntity;
             return new SPacketSpawnObject(this.trackedEntity, 91, 1 + (entity1 == null ? this.trackedEntity.getEntityId() : entity1.getEntityId()));
         } else if (this.trackedEntity instanceof EntityTippedArrow) {
@@ -82,13 +94,11 @@ public abstract class EntityTrackerEntryMixin {
         } else if (this.trackedEntity instanceof EntityFireworkRocket) {
             return new SPacketSpawnObject(this.trackedEntity, 76);
         } else {
-            Packet<?> spawnPacket1 = createSpawnPacket1();
-            if (spawnPacket1 != null) return spawnPacket1;
-            throw new IllegalArgumentException("Don't know how to add " + this.trackedEntity.getClass() + "!");
+            return createSpawnPacket2();
         }
     }
 
-    private Packet<?> createSpawnPacket1() {
+    private Packet<?> createSpawnPacket2() {
         if (this.trackedEntity instanceof EntityFireball) {
             EntityFireball entityfireball = (EntityFireball) this.trackedEntity;
             SPacketSpawnObject spacketspawnobject = null;
