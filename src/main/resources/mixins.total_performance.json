@@ -8,6 +8,7 @@
     "EntityTrackerEntryMixin",
     "ExplosionMixin",
     "FakePlayerMixin",
+    "ItemStackMixin",
     "MinecraftServerMixin",
     "MixinEventBus",
     "MultiPartEntityPartMixin",
@@ -16,12 +17,12 @@
     "WorldProviderSurfaceMixin"
   ],
   "client": [
+    "ForgeHooksClientMixin",
     "LayerEnderDragonDeathMixin",
     "RenderGlobalMixin",
-    "ForgeHooksClientMixin",
+    "TileEntityMixin",
     "WorldMixin",
-    "WorldProviderEndMixin",
-    "TileEntityMixin"
+    "WorldProviderEndMixin"
   ],
   "server": []
 }
