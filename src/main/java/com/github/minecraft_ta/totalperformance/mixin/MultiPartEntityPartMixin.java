@@ -23,4 +23,14 @@ public abstract class MultiPartEntityPartMixin extends Entity {
     public boolean isImmuneToExplosions() {
         return parent instanceof EntityDragon && ((EntityDragon) parent).getPhaseManager().getCurrentPhase().getType().equals(PhaseList.DYING);
     }
+
+    @Override
+    public boolean isInLava() {
+        return false;
+    }
+
+    @Override
+    public boolean handleWaterMovement() {
+        return false;
+    }
 }

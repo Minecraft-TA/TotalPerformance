@@ -42,6 +42,7 @@ minecraft {
 
 repositories {
     maven { url = 'https://repo.spongepowered.org/maven' }
+    maven { url = "https://maven.cleanroommc.com" }
 }
 
 configurations {
@@ -58,6 +59,7 @@ dependencies {
     }
     annotationProcessor 'org.spongepowered:mixin:0.8.3-SNAPSHOT:processor'
     testAnnotationProcessor 'org.spongepowered:mixin:0.8.3-SNAPSHOT:processor'
+    implementation fg.deobf('zone.rong:mixinbooter:5.0')
 }
 
 mixin {

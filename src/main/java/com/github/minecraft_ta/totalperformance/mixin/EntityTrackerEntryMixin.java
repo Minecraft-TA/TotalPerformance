@@ -7,6 +7,7 @@ import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.*;
+import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.*;
 import net.minecraft.util.math.MathHelper;
@@ -39,36 +40,116 @@ public abstract class EntityTrackerEntryMixin {
     }
 
     private Packet<?> createSpawnPacket0() {
-        if (this.trackedEntity.isDead) {
-            LOGGER.warn("Fetching addPacket for removed entity");
-        }
+        checkDead();
 
-        Packet<?> pkt = FMLNetworkHandler.getEntitySpawningPacket(this.trackedEntity);
+        Packet<?> pkt = getCustomPacket();
         if (pkt != null) return pkt;
 
-        if (this.trackedEntity instanceof EntityPlayerMP) {
-            return new SPacketSpawnPlayer((EntityPlayer) this.trackedEntity);
-        } else if (this.trackedEntity instanceof IAnimals) {
-            this.lastHeadMotion = MathHelper.floor(this.trackedEntity.getRotationYawHead() * 256.0F / 360.0F);
-            return new SPacketSpawnMob((EntityLivingBase) this.trackedEntity);
-        } else if (this.trackedEntity instanceof EntityPainting) {
-            return new SPacketSpawnPainting((EntityPainting) this.trackedEntity);
-        } else if (this.trackedEntity instanceof EntityItem) {
-            return new SPacketSpawnObject(this.trackedEntity, 2, 1);
-        } else if (this.trackedEntity instanceof EntityMinecart) {
-            EntityMinecart entityminecart = (EntityMinecart) this.trackedEntity;
-            return new SPacketSpawnObject(this.trackedEntity, 10, entityminecart.getType().getId());
-        } else if (this.trackedEntity instanceof EntityBoat) {
-            return new SPacketSpawnObject(this.trackedEntity, 1);
-        } else if (this.trackedEntity instanceof EntityXPOrb) {
-            return new SPacketSpawnExperienceOrb((EntityXPOrb) this.trackedEntity);
-        } else if (this.trackedEntity instanceof EntityFishHook) {
-            Entity entity2 = ((EntityFishHook) this.trackedEntity).getAngler();
-            return new SPacketSpawnObject(this.trackedEntity, 90, entity2 == null ? this.trackedEntity.getEntityId() : entity2.getEntityId());
+        return getPacket();
+    }
+
+    private Packet<? extends INetHandler> getPacket() {
+        if (instanceOfPlayer()) {
+            return getPacketSpawnPlayer();
+        } else if (instanceOfIAnimal()) {
+            return getPacketSpawnMob();
+        } else if (instanceOfPainting()) {
+            return getPacketSpawnPainting();
+        } else if (instanceOfEntityItem()) {
+            return getPacketSpawnObject();
+        } else if (instanceOfMinecart()) {
+            return getPacketSpawnMinecart();
+        } else if (instanceOfBoat()) {
+            return getPacketSpawnBoat();
+        } else if (instanceOfXpOrb()) {
+            return getPacketSpawnExperienceOrb();
+        } else if (instanceOfEntityFishHook()) {
+            return getPacketSpawnEntityFishHook();
         } else {
-            Packet<?> spawnPacket1 = createSpawnPacket1();
-            if (spawnPacket1 != null) return spawnPacket1;
-            throw new IllegalArgumentException("Don't know how to add " + this.trackedEntity.getClass() + "!");
+            return getPacket1();
+        }
+    }
+
+    private Packet<?> getPacket1() {
+        Packet<?> spawnPacket1 = createSpawnPacket1();
+        if (spawnPacket1 != null) return spawnPacket1;
+        throw new IllegalArgumentException("Don't know how to add " + this.trackedEntity.getClass() + "!");
+    }
+
+    private SPacketSpawnObject getPacketSpawnEntityFishHook() {
+        Entity entity2 = ((EntityFishHook) this.trackedEntity).getAngler();
+        return new SPacketSpawnObject(this.trackedEntity, 90, entity2 == null ? this.trackedEntity.getEntityId() : entity2.getEntityId());
+    }
+
+    private boolean instanceOfEntityFishHook() {
+        return this.trackedEntity instanceof EntityFishHook;
+    }
+
+    private SPacketSpawnExperienceOrb getPacketSpawnExperienceOrb() {
+        return new SPacketSpawnExperienceOrb((EntityXPOrb) this.trackedEntity);
+    }
+
+    private boolean instanceOfXpOrb() {
+        return this.trackedEntity instanceof EntityXPOrb;
+    }
+
+    private SPacketSpawnObject getPacketSpawnBoat() {
+        return new SPacketSpawnObject(this.trackedEntity, 1);
+    }
+
+    private boolean instanceOfBoat() {
+        return this.trackedEntity instanceof EntityBoat;
+    }
+
+    private SPacketSpawnObject getPacketSpawnMinecart() {
+        EntityMinecart entityminecart = (EntityMinecart) this.trackedEntity;
+        return new SPacketSpawnObject(this.trackedEntity, 10, entityminecart.getType().getId());
+    }
+
+    private boolean instanceOfMinecart() {
+        return this.trackedEntity instanceof EntityMinecart;
+    }
+
+    private SPacketSpawnObject getPacketSpawnObject() {
+        return new SPacketSpawnObject(this.trackedEntity, 2, 1);
+    }
+
+    private boolean instanceOfEntityItem() {
+        return this.trackedEntity instanceof EntityItem;
+    }
+
+    private SPacketSpawnPainting getPacketSpawnPainting() {
+        return new SPacketSpawnPainting((EntityPainting) this.trackedEntity);
+    }
+
+    private boolean instanceOfPainting() {
+        return this.trackedEntity instanceof EntityPainting;
+    }
+
+    private SPacketSpawnMob getPacketSpawnMob() {
+        this.lastHeadMotion = MathHelper.floor(this.trackedEntity.getRotationYawHead() * 256.0F / 360.0F);
+        return new SPacketSpawnMob((EntityLivingBase) this.trackedEntity);
+    }
+
+    private boolean instanceOfIAnimal() {
+        return this.trackedEntity instanceof IAnimals;
+    }
+
+    private SPacketSpawnPlayer getPacketSpawnPlayer() {
+        return new SPacketSpawnPlayer((EntityPlayer) this.trackedEntity);
+    }
+
+    private boolean instanceOfPlayer() {
+        return this.trackedEntity instanceof EntityPlayerMP;
+    }
+
+    private Packet<?> getCustomPacket() {
+        return FMLNetworkHandler.getEntitySpawningPacket(this.trackedEntity);
+    }
+
+    private void checkDead() {
+        if (this.trackedEntity.isDead) {
+            LOGGER.warn("Fetching addPacket for removed entity");
         }
     }
 

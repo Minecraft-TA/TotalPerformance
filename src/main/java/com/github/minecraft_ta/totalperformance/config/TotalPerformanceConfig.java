@@ -25,8 +25,9 @@ public class TotalPerformanceConfig {
     public boolean doDragonParticles;
     public boolean loadSpawnChunks;
     public int autoSaveInterval;
+    public double particleSpawnRange;
 
-    public TotalPerformanceConfig(Configuration config) {
+	public TotalPerformanceConfig(Configuration config) {
         this.config = config;
 
         this.loadConfig();
@@ -57,6 +58,7 @@ public class TotalPerformanceConfig {
         this.maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
         this.doDragonParticles = this.config.getBoolean("doDragonParticles", CATEGORY_MISC, true, "Set to false to disable the dragon particles");
         this.maxTileEntityRenderDistanceSquared = (int) Math.pow(this.config.getInt("maxTileEntityRenderDistance", CATEGORY_MISC, 64, 0, Integer.MAX_VALUE, "Sets a custom max render distance for tile entities"), 2);
+        this.particleSpawnRange = (int) Math.pow(this.config.getInt("particleSpawnRange", CATEGORY_MISC, 32, 0, Integer.MAX_VALUE, "Sets a custom range for the particles to spawn"), 2);
 
         if (this.config.hasChanged())
             this.config.save();
