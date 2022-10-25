@@ -1,6 +1,6 @@
 [
   {
-    "modid": "${mod_id}",
+    "modid": "total_performance",
     "name": "${mod_name}",
     "description": "${mod_description}",
     "version": "${version}",

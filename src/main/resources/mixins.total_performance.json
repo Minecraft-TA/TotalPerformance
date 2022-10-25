@@ -18,6 +18,9 @@
   "client": [
     "LayerEnderDragonDeathMixin",
     "RenderGlobalMixin",
+    "ForgeHooksClientMixin",
+    "WorldMixin",
+    "WorldProviderEndMixin",
     "TileEntityMixin"
   ],
   "server": []

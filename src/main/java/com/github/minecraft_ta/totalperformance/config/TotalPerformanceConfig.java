@@ -27,7 +27,11 @@ public class TotalPerformanceConfig {
     public int autoSaveInterval;
     public double particleSpawnRange;
 
-	public TotalPerformanceConfig(Configuration config) {
+    public boolean disableCustomSkyRenderer;
+    public boolean forceOverworldSkyRender;
+    public boolean disableEndRendering;
+    public int forcedDayTime;
+    public TotalPerformanceConfig(Configuration config) {
         this.config = config;
 
         this.loadConfig();
@@ -58,6 +62,10 @@ public class TotalPerformanceConfig {
         this.maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
         this.doDragonParticles = this.config.getBoolean("doDragonParticles", CATEGORY_MISC, true, "Set to false to disable the dragon particles");
         this.maxTileEntityRenderDistanceSquared = (int) Math.pow(this.config.getInt("maxTileEntityRenderDistance", CATEGORY_MISC, 64, 0, Integer.MAX_VALUE, "Sets a custom max render distance for tile entities"), 2);
+        this.disableCustomSkyRenderer = this.config.getBoolean("disableCustomSkyRenderer", CATEGORY_MISC, false, "Disables any custom sky renderer");
+        this.disableEndRendering = this.config.getBoolean("disableEndRendering", CATEGORY_MISC, false, "Forces the end to use the overworld sky renderer");
+        this.forceOverworldSkyRender = this.config.getBoolean("forceOverworldSkyRender", CATEGORY_MISC, false, "Forces the overworld sky renderer in any dimension");
+        this.forcedDayTime = this.config.getInt("forcedDayTime", CATEGORY_MISC, -1, -1, 24000, "Forces the current day time");
         this.particleSpawnRange = (int) Math.pow(this.config.getInt("particleSpawnRange", CATEGORY_MISC, 32, 0, Integer.MAX_VALUE, "Sets a custom range for the particles to spawn"), 2);
 
         if (this.config.hasChanged())

@@ -75,7 +75,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
-        expand 'mod_id': mod_id, 'mod_name': mod_name, 'version': project.version,
+        expand 'mod_name': mod_name, 'version': project.version,
                 'mcversion': minecraft_version, 'mod_description': mod_description
     }
 
