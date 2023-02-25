@@ -20,6 +20,7 @@
     "ForgeHooksClientMixin",
     "LayerEnderDragonDeathMixin",
     "RenderGlobalMixin",
+    "EntityMixin",
     "TileEntityMixin",
     "WorldMixin",
     "WorldProviderEndMixin"

@@ -22,6 +22,7 @@ public class TotalPerformanceConfig {
     public Map<String, Triple<Boolean, String, List<String>>> eventBlockMap;
     public int maxPacketSize;
     public int maxTileEntityRenderDistanceSquared;
+    public int entityRenderDistance;
     public boolean doDragonParticles;
     public boolean loadSpawnChunks;
     public int autoSaveInterval;
@@ -62,6 +63,7 @@ public class TotalPerformanceConfig {
         this.maxPacketSize = this.config.getInt("maxPacketSize", CATEGORY_MISC, 32767, 0, Integer.MAX_VALUE, "Sets a custom max size for the packet in CPacketCustomPayload");
         this.doDragonParticles = this.config.getBoolean("doDragonParticles", CATEGORY_MISC, true, "Set to false to disable the dragon particles");
         this.maxTileEntityRenderDistanceSquared = (int) Math.pow(this.config.getInt("maxTileEntityRenderDistance", CATEGORY_MISC, 64, 0, Integer.MAX_VALUE, "Sets a custom max render distance for tile entities"), 2);
+        this.entityRenderDistance = this.config.getInt("entityRenderDistance", CATEGORY_MISC, -1, -1, Integer.MAX_VALUE, "Sets a custom render distance for entities");
         this.disableCustomSkyRenderer = this.config.getBoolean("disableCustomSkyRenderer", CATEGORY_MISC, false, "Disables any custom sky renderer");
         this.disableEndRendering = this.config.getBoolean("disableEndRendering", CATEGORY_MISC, false, "Forces the end to use the overworld sky renderer");
         this.forceOverworldSkyRender = this.config.getBoolean("forceOverworldSkyRender", CATEGORY_MISC, false, "Forces the overworld sky renderer in any dimension");
